@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Comment IQ</title>
+    <!-- Include meta tag to ensure proper rendering and touch zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include bootstrap stylesheets -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+
+</head>
+<body>
+<script type="text/javascript">
+        function preloader(){
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }
+        window.onload = preloader;
+</script>
+<style>
+    div#content {
+    display: none;
+    }
+
+div#loading {
+    top: 200 px;
+    margin: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 160px;
+    height: 24px;
+    background: url(static/loading_circle.gif) no-repeat;
+    cursor: wait;
+    }
+</style>
+<div id="loading"></div>
+<div id="content">
+<div class="container">
+      <h2>Comment IQ</h2>
+      <a href="/">Home</a> &nbsp;&nbsp;
+      <a href="/calculate_ar">Calculate AR</a> &nbsp;&nbsp;
+      <a href="/calculate_cr">Calculate CR</a>
+        </br>
+        </br>
+      <div class="table-responsive">
+       <table class="table table-striped table-bordered">
+         <thead>
+           <tr>
+             <th>Articles</th>
+
+           </tr>
+         </thead>
+         <tbody>
+         {% for i in disp_list %}
+         <tr>
+             <td>
+                 <a href="/article_details?article_url={{ i[3] }}&&title={{ i[6] }}"> {{ i[6] }}</a>
+             </td>
+         </tr>
+         {% endfor %}
+
+         </tbody>
+       </table>
+      </div>
+
+
+    </div>
+</div>
+    <!-- JavaScript placed at the end of the document so the pages load faster -->
+    <!-- Optional: Include the jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Optional: Incorporate the Bootstrap JavaScript plugins -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
