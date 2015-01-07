@@ -12,9 +12,7 @@
 
 <div class="container">
       <h2>{{ article_title }}</h2>
-      <a href="/">Home</a> &nbsp;&nbsp;
-      <a href="/calculate_ar">Calculate AR</a> &nbsp;&nbsp;
-      <a href="/calculate_cr">Calculate CR</a>
+    <a href="/">Home</a> &nbsp;&nbsp;
         </br>
         </br>
       <div class="table-responsive">
@@ -22,7 +20,8 @@
          <thead>
            <tr>
              <th>Comments</th>
-            <th>{{ score }}</th>
+            <th> AR-score </th>
+            <th> CR-score </th>
            </tr>
          </thead>
          <tbody>
@@ -31,7 +30,21 @@
              <td>
                  {{ i[2] }}
              </td>
-         <td>{{ i[13] }}</td>
+
+         <td>
+                {% if i[13] == None %}
+                 <a href="">Get Score</a>
+                {% else %}
+                {{ i[13] }}
+                {% endif %}
+         </td>
+         <td>
+                {% if i[14] == None %}
+                 <a href="">Get Score</a>
+                {% else %}
+                {{ i[14] }}
+                {% endif %}
+         </td>
          </tr>
          {% endfor %}
 

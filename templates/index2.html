@@ -39,8 +39,6 @@ div#loading {
 <div class="container">
       <h2>Comment IQ</h2>
       <a href="/">Home</a> &nbsp;&nbsp;
-      <a href="/calculate_ar">Calculate AR</a> &nbsp;&nbsp;
-      <a href="/calculate_cr">Calculate CR</a>
         </br>
         </br>
       <div class="table-responsive">
@@ -55,7 +53,7 @@ div#loading {
          {% for i in disp_list %}
          <tr>
              <td>
-                 <a href="/article_details?article_url={{ i[3] }}&&title={{ i[6] }}"> {{ i[6] }}</a>
+                 <a href="/article_details?article_url={{ i[3] }}&&title={{ i[2] }}"> {{ i[2] }}</a>
              </td>
          </tr>
          {% endfor %}

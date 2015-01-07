@@ -4,6 +4,9 @@ import time
 import datetime
 import json
 import mysql.connector
+import sys
+import re
+import os
 
 cnx = mysql.connector.connect(user='root', password='simran',
                               host='127.0.0.1',
@@ -14,9 +17,20 @@ COMMUNITY_API_KEY = "5f933be26992203507b0963c96c653f1:4:66447706"
 COMMUNITY_API_KEY2 = "6adcef7a975045db61389446ca15283e:1:30173638"
 COMMUNITY_API_KEY3 = "5a3d3ff964c9975c0f23d1ad3437dd45:0:70179423"
 
-key1_limit = 100
-key2_limit = 200
-key3_limit = 300
+key1_limit = 4999
+key2_limit = 9998
+key3_limit = 14997
+
+global g_offset
+global g_day
+
+def error_name(d,offset):
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    msg = str(exc_type)
+    error = re.split(r'[.]',msg)
+    error = re.findall(r'\w+',error[1])
+    error_msg = str(error[0]) + "occured in line " + str(exc_tb.tb_lineno) + " ,Last API call date: " + str(d) + " , offset: " + str(offset)
+    return error_msg
 
 def escape_string(string):
     res = string
@@ -62,11 +76,14 @@ def CollectComments():
     API_KEY = COMMUNITY_API_KEY
     nytapi = NYTCommunityAPI(API_KEY)
 # originally started collection from 20140115
-    d_start = datetime.date(2014,04,12)
-    d_end = datetime.date(2014,04,16)
+    d_start = datetime.date(2014,04,22)
+    d_end = datetime.date(2014,06,05)
     d = d_start
+    global g_offset
+    global g_day
     count = 0
     while d < d_end:
+        g_day = d
         offset = 0
         date_string = d.strftime("%Y%m%d")
 # Get the total # of comments for today
@@ -76,6 +93,7 @@ def CollectComments():
         count += 1
 # Loop through pages to get all comments
         while offset < totalCommentsFound:
+            g_offset = offset
             if (count > key1_limit) and (count < key2_limit):
                 if API_KEY != COMMUNITY_API_KEY2:
                     API_KEY = COMMUNITY_API_KEY2
@@ -88,10 +106,9 @@ def CollectComments():
                 d_end = d
                 print "last call on date: " + str(d)
                 print "last offset value: " + str(offset-25)
-                offset = totalCommentsFound
                 break;
             r = nytapi.apiCall(date_string, offset)
-# DB insertion call here.
+            # DB insertion call here.
             if "comments" in r["results"]:
                 for comment in r["results"]["comments"]:
                     commentBody = escape_string(str(comment["commentBody"].encode("utf8")))
@@ -113,6 +130,7 @@ def CollectComments():
                                     recommendationCount, editorsSelection, display_name.decode("utf8"),
                                     location.decode("utf8"), articleURL.decode("utf8"))
                     cursor.execute(insert_query)
+
             cnx.commit()
             offset = offset + pagesize
             count += 1
@@ -120,7 +138,8 @@ def CollectComments():
             print "counter value: " + str(count)
 # Go to next day
         d += datetime.timedelta(days=1)
-
-
-CollectComments()
+try:
+    CollectComments()
+except:
+    print error_name(g_day,g_offset)
 cnx.close()

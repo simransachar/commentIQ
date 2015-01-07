@@ -13,16 +13,15 @@
 <div class="container">
       <h2>{{ article_title }}</h2>
     <a href="/">Home</a> &nbsp;&nbsp;
-    <a href="/article_relevance?article_url={{ article_url }}&&article_title={{ article_title }}">Sort by AR</a> &nbsp;&nbsp;
-    <a href="/article_relevance2?article_url={{ article_url }}&&article_title={{ article_title }}">Sort by CR</a>
-        </br>
+     </br>
         </br>
       <div class="table-responsive">
        <table class="table table-striped table-bordered">
          <thead>
            <tr>
              <th>Comments</th>
-            <th>{{ score }}</th>
+            <th> AR-score </th>
+            <th> CR-score </th>
            </tr>
          </thead>
          <tbody>
@@ -31,7 +30,23 @@
              <td>
                  {{ i[2] }}
              </td>
-         <td>{{ i[13] }}</td>
+
+         <td>
+                {% if i[13] == 'None' or i[13] == None %}
+                 <a href="/calculate_ar?article_url={{ article_url }}&&comment_id={{ i[0] }}">Get Score</a>
+                {% else %}
+                {{ i[13] }}
+                <a href="/clear_data?article_url={{ article_url }}&&comment_id={{ i[0] }}&&type=ar">(clear)</a>
+                {% endif %}
+         </td>
+         <td>
+                {% if i[14] == 'None' or i[14] == None %}
+                 <a href="/calculate_cr?article_url={{ article_url }}&&comment_id={{ i[0] }}">Get Score</a>
+                {% else %}
+                {{ i[14] }}
+                <a href="/clear_data?article_url={{ article_url }}&&comment_id={{ i[0] }}&&type=cr">(clear)</a>
+                {% endif %}
+         </td>
          </tr>
          {% endfor %}
 
